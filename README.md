@@ -6,6 +6,8 @@ WOFF2 icon font with a documented Private-Use-Area codepoint map.
 
 ![NTDS Icons specimen](assets/specimen.png)
 
+**▶ Browse the live gallery — [peterellisjones.github.io/ntds-icons](https://peterellisjones.github.io/ntds-icons/)** — every glyph rendered in the font, affiliation-colored, with click-to-copy codepoints, search/filter, and a base + heading-vector + BDA **composition demo**.
+
 ## What this is — and the gap it fills
 
 There are good fonts for the modern **NATO/joint** symbology — **MIL-STD-2525**
@@ -277,8 +279,9 @@ The [`shapes`](src/shapes.rs) module exposes the raw `ShapeCmd` geometry
 ### Regenerating the font
 
 Font generation lives behind the `build` feature (pulls `kurbo`, `write-fonts`,
-`ttf2woff2`, `resvg`). One command regenerates every committed artifact from the
-shared codepoint data, so nothing drifts:
+`ttf2woff2`, `resvg`). One command regenerates every committed artifact —
+`ntds_icons.ttf`, `.woff2`, `specimen.png`, `codepoints.json`, and the gallery
+`index.html` — from the shared codepoint data, so nothing drifts:
 
 ```sh
 cargo run --features build --bin ntds-font-gen
@@ -286,6 +289,17 @@ cargo run --features build --bin ntds-font-gen
 
 `build_font(&FontLayout::default())` reproduces the committed `ntds_icons.ttf`
 byte-for-byte (enforced by a drift test).
+
+### Maintainer setup (Pages + releases)
+
+The gallery deploys via GitHub Actions. **One-time:** in repo Settings → Pages,
+set **Source: GitHub Actions**. After that:
+
+- **Gallery** — `.github/workflows/pages.yml` regenerates the site and deploys
+  it to Pages on every push to `main`.
+- **Releases** — `.github/workflows/release.yml` fires on a `vX.Y.Z` tag: it
+  drift-checks the committed TTF against a fresh build, then publishes a GitHub
+  Release with `ntds_icons.ttf` + `.woff2` attached.
 
 ## Licenses
 
