@@ -1,12 +1,12 @@
 //! Generate every NTDS font artifact from the shared codepoint data, in one
 //! pass, so nothing drifts: `ntds_icons.ttf`, `ntds_icons.woff2`,
-//! `specimen.png`, and `codepoints.json`.
+//! `specimen.png`, `codepoints.json`, and the Pages gallery `index.html`.
 
 use std::{fs, path::PathBuf};
 
 use clap::Parser;
 use ntds_icons::build::{
-    FontLayout, build_font, codepoints_json, render_specimen, to_woff2,
+    FontLayout, build_font, codepoints_json, render_gallery, render_specimen, to_woff2,
 };
 
 #[derive(Parser)]
@@ -27,6 +27,7 @@ fn main() {
     let woff2 = to_woff2(&ttf);
     let png = render_specimen(&ttf);
     let json = codepoints_json();
+    let gallery = render_gallery("ntds_icons.woff2");
 
     let write = |name: &str, bytes: &[u8]| {
         let path = args.out_dir.join(name);
@@ -38,4 +39,5 @@ fn main() {
     write("ntds_icons.woff2", &woff2);
     write("specimen.png", &png);
     write("codepoints.json", json.as_bytes());
+    write("index.html", gallery.as_bytes());
 }

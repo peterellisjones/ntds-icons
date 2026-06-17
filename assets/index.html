@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NTDS Icons — naval tactical symbol font</title>
+<meta name="description" content="An installable NTDS (Naval Tactical Data System) outline tactical-symbol icon font.">
+<style>
+  @font-face {
+    font-family: "NTDS Icons";
+    src: url("ntds_icons.woff2") format("woff2");
+    font-display: block;
+  }
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2330;
+    --border: #30363d;
+    --ink: #c9d1d9;
+    --dim: #8b949e;
+    --accent: #58a6ff;
+    --friend: #4aa3ff;
+    --enemy: #ff5a5a;
+    --unknown: #ffd23f;
+    --neutral: #4ade80;
+    --mono: ui-monospace, "SF Mono", "B612 Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+  header h1 { font-family: var(--mono); font-size: 30px; margin: 0 0 6px; letter-spacing: .5px; }
+  header .glyph-mark { color: var(--friend); }
+  header p { color: var(--dim); margin: 0 0 14px; }
+  header .links a { color: var(--accent); text-decoration: none; margin-right: 16px; font-size: 14px; }
+  header .links a:hover { text-decoration: underline; }
+  h2 { font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+       color: var(--dim); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin: 36px 0 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; }
+
+  /* Composition demo */
+  #demo { padding: 20px; margin-top: 24px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+  #demo .controls label { display: block; font-size: 12px; color: var(--dim); margin: 12px 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+  #demo .controls label:first-child { margin-top: 0; }
+  #demo select, #demo input[type=range] { width: 100%; }
+  #demo select {
+    background: var(--panel-2); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 3px; padding: 6px 8px; font: inherit;
+  }
+  #demo .heading-row { display: flex; align-items: center; gap: 10px; }
+  #demo .heading-row output { font-family: var(--mono); color: var(--ink); min-width: 44px; }
+  #demo input:disabled { opacity: .35; }
+  #demo .stage { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #demo-preview { font-family: "NTDS Icons"; font-size: 150px; line-height: 1; min-height: 170px; display: flex; align-items: center; }
+  #demo .codes { font-family: var(--mono); color: var(--dim); margin: 8px 0 14px; font-size: 14px; }
+  button.copy {
+    background: var(--panel-2); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 3px; padding: 7px 14px; font: inherit; cursor: pointer;
+  }
+  button.copy:hover { border-color: var(--accent); }
+  button.copy.copied { border-color: var(--neutral); color: var(--neutral); }
+
+  /* Controls bar */
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 28px 0 4px; }
+  #search {
+    flex: 1; min-width: 200px; background: var(--panel); color: var(--ink);
+    border: 1px solid var(--border); border-radius: 3px; padding: 9px 12px; font: inherit;
+  }
+  .toggles { display: flex; gap: 6px; }
+  .aff-toggle {
+    border: 1px solid currentColor; background: transparent; border-radius: 3px;
+    padding: 6px 10px; font: 12px/1 var(--mono); cursor: pointer; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .aff-toggle[data-aff=Friend] { color: var(--friend); }
+  .aff-toggle[data-aff=Enemy] { color: var(--enemy); }
+  .aff-toggle[data-aff=Unknown] { color: var(--unknown); }
+  .aff-toggle[data-aff=Neutral] { color: var(--neutral); }
+  .aff-toggle.off { color: var(--dim); opacity: .5; }
+
+  /* Grid */
+  section.cat.hidden, .card.hidden { display: none; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+    padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; color: inherit; font: inherit; text-align: center;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card.copied { border-color: var(--neutral); }
+  .card .glyph { font-family: "NTDS Icons"; font-size: 40px; line-height: 1; height: 44px; display: flex; align-items: center; }
+  .card .cp { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+  .card .name { font-size: 11px; color: var(--dim); word-break: break-word; }
+  footer { color: var(--dim); font-size: 13px; margin-top: 48px; border-top: 1px solid var(--border); padding-top: 16px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) { #demo { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="glyph-mark">◈</span> NTDS Icons</h1>
+    <p>An installable NTDS (Naval Tactical Data System) outline tactical-symbol icon font. Closed = surface, top-open = air, bottom-open = subsurface; square = unknown affiliation.</p>
+    <p class="links">
+      <a href="https://crates.io/crates/ntds-icons">crates.io</a>
+      <a href="https://github.com/peterellisjones/ntds-icons">GitHub</a>
+      <a href="https://github.com/peterellisjones/ntds-icons/blob/main/OFL.txt">Font license (OFL 1.1)</a>
+    </p>
+  </header>
+
+  <h2>Composition demo</h2>
+  <div id="demo" class="panel">
+    <div class="controls">
+      <label for="demo-class">Class</label>
+      <select id="demo-class"></select>
+      <label for="demo-aff">Affiliation</label>
+      <select id="demo-aff"></select>
+      <label for="demo-heading">Heading</label>
+      <div class="heading-row">
+        <input type="range" id="demo-heading" min="0" max="355" step="5" value="45">
+        <output id="demo-heading-out">045°</output>
+      </div>
+      <label for="demo-bda">BDA (replaces heading)</label>
+      <select id="demo-bda">
+        <option value="None">None</option>
+        <option value="Uncertain">Uncertain</option>
+        <option value="ProbablyDestroyed">ProbablyDestroyed</option>
+      </select>
+    </div>
+    <div class="stage">
+      <span id="demo-preview"></span>
+      <div class="codes" id="demo-codes"></div>
+      <button class="copy" id="demo-copy" type="button">Copy codepoints</button>
+    </div>
+  </div>
+
+  <h2>All glyphs</h2>
+  <div class="bar">
+    <input id="search" type="search" placeholder="Search name or codepoint…" autocomplete="off">
+    <div class="toggles">
+      <button class="aff-toggle" data-aff="Friend" type="button">Friend</button>
+      <button class="aff-toggle" data-aff="Enemy" type="button">Enemy</button>
+      <button class="aff-toggle" data-aff="Unknown" type="button">Unknown</button>
+      <button class="aff-toggle" data-aff="Neutral" type="button">Neutral</button>
+    </div>
+  </div>
+  <div id="grid"></div>
+
+  <footer>
+    Glyphs occupy the Private Use Area <code>U+E000–U+E0A9</code>. Font under
+    <a href="https://github.com/peterellisjones/ntds-icons/blob/main/OFL.txt">SIL OFL 1.1</a>;
+    the generator crate under MIT/Apache-2.0. Generated by <code>ntds-font-gen</code>.
+  </footer>
+</div>
+
+<script>
+const GLYPHS = [{"cp":"E000","ch":"\ue000","name":"Air.Friend","cat":"symbol","class":"Air","aff":"Friend","deg":null,"bda":null},{"cp":"E001","ch":"\ue001","name":"Air.Enemy","cat":"symbol","class":"Air","aff":"Enemy","deg":null,"bda":null},{"cp":"E002","ch":"\ue002","name":"Air.Unknown","cat":"symbol","class":"Air","aff":"Unknown","deg":null,"bda":null},{"cp":"E003","ch":"\ue003","name":"Air.Neutral","cat":"symbol","class":"Air","aff":"Neutral","deg":null,"bda":null},{"cp":"E004","ch":"\ue004","name":"Helicopter.Friend","cat":"symbol","class":"Helicopter","aff":"Friend","deg":null,"bda":null},{"cp":"E005","ch":"\ue005","name":"Helicopter.Enemy","cat":"symbol","class":"Helicopter","aff":"Enemy","deg":null,"bda":null},{"cp":"E006","ch":"\ue006","name":"Helicopter.Unknown","cat":"symbol","class":"Helicopter","aff":"Unknown","deg":null,"bda":null},{"cp":"E007","ch":"\ue007","name":"Helicopter.Neutral","cat":"symbol","class":"Helicopter","aff":"Neutral","deg":null,"bda":null},{"cp":"E008","ch":"\ue008","name":"Surface.Friend","cat":"symbol","class":"Surface","aff":"Friend","deg":null,"bda":null},{"cp":"E009","ch":"\ue009","name":"Surface.Enemy","cat":"symbol","class":"Surface","aff":"Enemy","deg":null,"bda":null},{"cp":"E00A","ch":"\ue00a","name":"Surface.Unknown","cat":"symbol","class":"Surface","aff":"Unknown","deg":null,"bda":null},{"cp":"E00B","ch":"\ue00b","name":"Surface.Neutral","cat":"symbol","class":"Surface","aff":"Neutral","deg":null,"bda":null},{"cp":"E00C","ch":"\ue00c","name":"Subsurface.Friend","cat":"symbol","class":"Subsurface","aff":"Friend","deg":null,"bda":null},{"cp":"E00D","ch":"\ue00d","name":"Subsurface.Enemy","cat":"symbol","class":"Subsurface","aff":"Enemy","deg":null,"bda":null},{"cp":"E00E","ch":"\ue00e","name":"Subsurface.Unknown","cat":"symbol","class":"Subsurface","aff":"Unknown","deg":null,"bda":null},{"cp":"E00F","ch":"\ue00f","name":"Subsurface.Neutral","cat":"symbol","class":"Subsurface","aff":"Neutral","deg":null,"bda":null},{"cp":"E010","ch":"\ue010","name":"CommandShip.Friend","cat":"symbol","class":"CommandShip","aff":"Friend","deg":null,"bda":null},{"cp":"E011","ch":"\ue011","name":"CommandShip.Enemy","cat":"symbol","class":"CommandShip","aff":"Enemy","deg":null,"bda":null},{"cp":"E012","ch":"\ue012","name":"CommandShip.Unknown","cat":"symbol","class":"CommandShip","aff":"Unknown","deg":null,"bda":null},{"cp":"E013","ch":"\ue013","name":"CommandShip.Neutral","cat":"symbol","class":"CommandShip","aff":"Neutral","deg":null,"bda":null},{"cp":"E014","ch":"\ue014","name":"Land.Friend","cat":"symbol","class":"Land","aff":"Friend","deg":null,"bda":null},{"cp":"E015","ch":"\ue015","name":"Land.Enemy","cat":"symbol","class":"Land","aff":"Enemy","deg":null,"bda":null},{"cp":"E016","ch":"\ue016","name":"Land.Unknown","cat":"symbol","class":"Land","aff":"Unknown","deg":null,"bda":null},{"cp":"E017","ch":"\ue017","name":"Land.Neutral","cat":"symbol","class":"Land","aff":"Neutral","deg":null,"bda":null},{"cp":"E018","ch":"\ue018","name":"Missile.Friend","cat":"symbol","class":"Missile","aff":"Friend","deg":null,"bda":null},{"cp":"E019","ch":"\ue019","name":"Missile.Enemy","cat":"symbol","class":"Missile","aff":"Enemy","deg":null,"bda":null},{"cp":"E01A","ch":"\ue01a","name":"Missile.Unknown","cat":"symbol","class":"Missile","aff":"Unknown","deg":null,"bda":null},{"cp":"E01B","ch":"\ue01b","name":"Missile.Neutral","cat":"symbol","class":"Missile","aff":"Neutral","deg":null,"bda":null},{"cp":"E01C","ch":"\ue01c","name":"Torpedo.Friend","cat":"symbol","class":"Torpedo","aff":"Friend","deg":null,"bda":null},{"cp":"E01D","ch":"\ue01d","name":"Torpedo.Enemy","cat":"symbol","class":"Torpedo","aff":"Enemy","deg":null,"bda":null},{"cp":"E01E","ch":"\ue01e","name":"Torpedo.Unknown","cat":"symbol","class":"Torpedo","aff":"Unknown","deg":null,"bda":null},{"cp":"E01F","ch":"\ue01f","name":"Torpedo.Neutral","cat":"symbol","class":"Torpedo","aff":"Neutral","deg":null,"bda":null},{"cp":"E020","ch":"\ue020","name":"bda.Uncertain","cat":"bda","class":null,"aff":null,"deg":null,"bda":"Uncertain"},{"cp":"E021","ch":"\ue021","name":"bda.ProbablyDestroyed","cat":"bda","class":null,"aff":null,"deg":null,"bda":"ProbablyDestroyed"},{"cp":"E022","ch":"\ue022","name":"heading.0","cat":"heading","class":null,"aff":null,"deg":0,"bda":null},{"cp":"E023","ch":"\ue023","name":"heading.5","cat":"heading","class":null,"aff":null,"deg":5,"bda":null},{"cp":"E024","ch":"\ue024","name":"heading.10","cat":"heading","class":null,"aff":null,"deg":10,"bda":null},{"cp":"E025","ch":"\ue025","name":"heading.15","cat":"heading","class":null,"aff":null,"deg":15,"bda":null},{"cp":"E026","ch":"\ue026","name":"heading.20","cat":"heading","class":null,"aff":null,"deg":20,"bda":null},{"cp":"E027","ch":"\ue027","name":"heading.25","cat":"heading","class":null,"aff":null,"deg":25,"bda":null},{"cp":"E028","ch":"\ue028","name":"heading.30","cat":"heading","class":null,"aff":null,"deg":30,"bda":null},{"cp":"E029","ch":"\ue029","name":"heading.35","cat":"heading","class":null,"aff":null,"deg":35,"bda":null},{"cp":"E02A","ch":"\ue02a","name":"heading.40","cat":"heading","class":null,"aff":null,"deg":40,"bda":null},{"cp":"E02B","ch":"\ue02b","name":"heading.45","cat":"heading","class":null,"aff":null,"deg":45,"bda":null},{"cp":"E02C","ch":"\ue02c","name":"heading.50","cat":"heading","class":null,"aff":null,"deg":50,"bda":null},{"cp":"E02D","ch":"\ue02d","name":"heading.55","cat":"heading","class":null,"aff":null,"deg":55,"bda":null},{"cp":"E02E","ch":"\ue02e","name":"heading.60","cat":"heading","class":null,"aff":null,"deg":60,"bda":null},{"cp":"E02F","ch":"\ue02f","name":"heading.65","cat":"heading","class":null,"aff":null,"deg":65,"bda":null},{"cp":"E030","ch":"\ue030","name":"heading.70","cat":"heading","class":null,"aff":null,"deg":70,"bda":null},{"cp":"E031","ch":"\ue031","name":"heading.75","cat":"heading","class":null,"aff":null,"deg":75,"bda":null},{"cp":"E032","ch":"\ue032","name":"heading.80","cat":"heading","class":null,"aff":null,"deg":80,"bda":null},{"cp":"E033","ch":"\ue033","name":"heading.85","cat":"heading","class":null,"aff":null,"deg":85,"bda":null},{"cp":"E034","ch":"\ue034","name":"heading.90","cat":"heading","class":null,"aff":null,"deg":90,"bda":null},{"cp":"E035","ch":"\ue035","name":"heading.95","cat":"heading","class":null,"aff":null,"deg":95,"bda":null},{"cp":"E036","ch":"\ue036","name":"heading.100","cat":"heading","class":null,"aff":null,"deg":100,"bda":null},{"cp":"E037","ch":"\ue037","name":"heading.105","cat":"heading","class":null,"aff":null,"deg":105,"bda":null},{"cp":"E038","ch":"\ue038","name":"heading.110","cat":"heading","class":null,"aff":null,"deg":110,"bda":null},{"cp":"E039","ch":"\ue039","name":"heading.115","cat":"heading","class":null,"aff":null,"deg":115,"bda":null},{"cp":"E03A","ch":"\ue03a","name":"heading.120","cat":"heading","class":null,"aff":null,"deg":120,"bda":null},{"cp":"E03B","ch":"\ue03b","name":"heading.125","cat":"heading","class":null,"aff":null,"deg":125,"bda":null},{"cp":"E03C","ch":"\ue03c","name":"heading.130","cat":"heading","class":null,"aff":null,"deg":130,"bda":null},{"cp":"E03D","ch":"\ue03d","name":"heading.135","cat":"heading","class":null,"aff":null,"deg":135,"bda":null},{"cp":"E03E","ch":"\ue03e","name":"heading.140","cat":"heading","class":null,"aff":null,"deg":140,"bda":null},{"cp":"E03F","ch":"\ue03f","name":"heading.145","cat":"heading","class":null,"aff":null,"deg":145,"bda":null},{"cp":"E040","ch":"\ue040","name":"heading.150","cat":"heading","class":null,"aff":null,"deg":150,"bda":null},{"cp":"E041","ch":"\ue041","name":"heading.155","cat":"heading","class":null,"aff":null,"deg":155,"bda":null},{"cp":"E042","ch":"\ue042","name":"heading.160","cat":"heading","class":null,"aff":null,"deg":160,"bda":null},{"cp":"E043","ch":"\ue043","name":"heading.165","cat":"heading","class":null,"aff":null,"deg":165,"bda":null},{"cp":"E044","ch":"\ue044","name":"heading.170","cat":"heading","class":null,"aff":null,"deg":170,"bda":null},{"cp":"E045","ch":"\ue045","name":"heading.175","cat":"heading","class":null,"aff":null,"deg":175,"bda":null},{"cp":"E046","ch":"\ue046","name":"heading.180","cat":"heading","class":null,"aff":null,"deg":180,"bda":null},{"cp":"E047","ch":"\ue047","name":"heading.185","cat":"heading","class":null,"aff":null,"deg":185,"bda":null},{"cp":"E048","ch":"\ue048","name":"heading.190","cat":"heading","class":null,"aff":null,"deg":190,"bda":null},{"cp":"E049","ch":"\ue049","name":"heading.195","cat":"heading","class":null,"aff":null,"deg":195,"bda":null},{"cp":"E04A","ch":"\ue04a","name":"heading.200","cat":"heading","class":null,"aff":null,"deg":200,"bda":null},{"cp":"E04B","ch":"\ue04b","name":"heading.205","cat":"heading","class":null,"aff":null,"deg":205,"bda":null},{"cp":"E04C","ch":"\ue04c","name":"heading.210","cat":"heading","class":null,"aff":null,"deg":210,"bda":null},{"cp":"E04D","ch":"\ue04d","name":"heading.215","cat":"heading","class":null,"aff":null,"deg":215,"bda":null},{"cp":"E04E","ch":"\ue04e","name":"heading.220","cat":"heading","class":null,"aff":null,"deg":220,"bda":null},{"cp":"E04F","ch":"\ue04f","name":"heading.225","cat":"heading","class":null,"aff":null,"deg":225,"bda":null},{"cp":"E050","ch":"\ue050","name":"heading.230","cat":"heading","class":null,"aff":null,"deg":230,"bda":null},{"cp":"E051","ch":"\ue051","name":"heading.235","cat":"heading","class":null,"aff":null,"deg":235,"bda":null},{"cp":"E052","ch":"\ue052","name":"heading.240","cat":"heading","class":null,"aff":null,"deg":240,"bda":null},{"cp":"E053","ch":"\ue053","name":"heading.245","cat":"heading","class":null,"aff":null,"deg":245,"bda":null},{"cp":"E054","ch":"\ue054","name":"heading.250","cat":"heading","class":null,"aff":null,"deg":250,"bda":null},{"cp":"E055","ch":"\ue055","name":"heading.255","cat":"heading","class":null,"aff":null,"deg":255,"bda":null},{"cp":"E056","ch":"\ue056","name":"heading.260","cat":"heading","class":null,"aff":null,"deg":260,"bda":null},{"cp":"E057","ch":"\ue057","name":"heading.265","cat":"heading","class":null,"aff":null,"deg":265,"bda":null},{"cp":"E058","ch":"\ue058","name":"heading.270","cat":"heading","class":null,"aff":null,"deg":270,"bda":null},{"cp":"E059","ch":"\ue059","name":"heading.275","cat":"heading","class":null,"aff":null,"deg":275,"bda":null},{"cp":"E05A","ch":"\ue05a","name":"heading.280","cat":"heading","class":null,"aff":null,"deg":280,"bda":null},{"cp":"E05B","ch":"\ue05b","name":"heading.285","cat":"heading","class":null,"aff":null,"deg":285,"bda":null},{"cp":"E05C","ch":"\ue05c","name":"heading.290","cat":"heading","class":null,"aff":null,"deg":290,"bda":null},{"cp":"E05D","ch":"\ue05d","name":"heading.295","cat":"heading","class":null,"aff":null,"deg":295,"bda":null},{"cp":"E05E","ch":"\ue05e","name":"heading.300","cat":"heading","class":null,"aff":null,"deg":300,"bda":null},{"cp":"E05F","ch":"\ue05f","name":"heading.305","cat":"heading","class":null,"aff":null,"deg":305,"bda":null},{"cp":"E060","ch":"\ue060","name":"heading.310","cat":"heading","class":null,"aff":null,"deg":310,"bda":null},{"cp":"E061","ch":"\ue061","name":"heading.315","cat":"heading","class":null,"aff":null,"deg":315,"bda":null},{"cp":"E062","ch":"\ue062","name":"heading.320","cat":"heading","class":null,"aff":null,"deg":320,"bda":null},{"cp":"E063","ch":"\ue063","name":"heading.325","cat":"heading","class":null,"aff":null,"deg":325,"bda":null},{"cp":"E064","ch":"\ue064","name":"heading.330","cat":"heading","class":null,"aff":null,"deg":330,"bda":null},{"cp":"E065","ch":"\ue065","name":"heading.335","cat":"heading","class":null,"aff":null,"deg":335,"bda":null},{"cp":"E066","ch":"\ue066","name":"heading.340","cat":"heading","class":null,"aff":null,"deg":340,"bda":null},{"cp":"E067","ch":"\ue067","name":"heading.345","cat":"heading","class":null,"aff":null,"deg":345,"bda":null},{"cp":"E068","ch":"\ue068","name":"heading.350","cat":"heading","class":null,"aff":null,"deg":350,"bda":null},{"cp":"E069","ch":"\ue069","name":"heading.355","cat":"heading","class":null,"aff":null,"deg":355,"bda":null},{"cp":"E06A","ch":"\ue06a","name":"geo.Air.Friend","cat":"geometric","class":"Air","aff":"Friend","deg":null,"bda":null},{"cp":"E06B","ch":"\ue06b","name":"geo.Air.Enemy","cat":"geometric","class":"Air","aff":"Enemy","deg":null,"bda":null},{"cp":"E06C","ch":"\ue06c","name":"geo.Air.Unknown","cat":"geometric","class":"Air","aff":"Unknown","deg":null,"bda":null},{"cp":"E06D","ch":"\ue06d","name":"geo.Air.Neutral","cat":"geometric","class":"Air","aff":"Neutral","deg":null,"bda":null},{"cp":"E06E","ch":"\ue06e","name":"geo.Helicopter.Friend","cat":"geometric","class":"Helicopter","aff":"Friend","deg":null,"bda":null},{"cp":"E06F","ch":"\ue06f","name":"geo.Helicopter.Enemy","cat":"geometric","class":"Helicopter","aff":"Enemy","deg":null,"bda":null},{"cp":"E070","ch":"\ue070","name":"geo.Helicopter.Unknown","cat":"geometric","class":"Helicopter","aff":"Unknown","deg":null,"bda":null},{"cp":"E071","ch":"\ue071","name":"geo.Helicopter.Neutral","cat":"geometric","class":"Helicopter","aff":"Neutral","deg":null,"bda":null},{"cp":"E072","ch":"\ue072","name":"geo.Surface.Friend","cat":"geometric","class":"Surface","aff":"Friend","deg":null,"bda":null},{"cp":"E073","ch":"\ue073","name":"geo.Surface.Enemy","cat":"geometric","class":"Surface","aff":"Enemy","deg":null,"bda":null},{"cp":"E074","ch":"\ue074","name":"geo.Surface.Unknown","cat":"geometric","class":"Surface","aff":"Unknown","deg":null,"bda":null},{"cp":"E075","ch":"\ue075","name":"geo.Surface.Neutral","cat":"geometric","class":"Surface","aff":"Neutral","deg":null,"bda":null},{"cp":"E076","ch":"\ue076","name":"geo.Subsurface.Friend","cat":"geometric","class":"Subsurface","aff":"Friend","deg":null,"bda":null},{"cp":"E077","ch":"\ue077","name":"geo.Subsurface.Enemy","cat":"geometric","class":"Subsurface","aff":"Enemy","deg":null,"bda":null},{"cp":"E078","ch":"\ue078","name":"geo.Subsurface.Unknown","cat":"geometric","class":"Subsurface","aff":"Unknown","deg":null,"bda":null},{"cp":"E079","ch":"\ue079","name":"geo.Subsurface.Neutral","cat":"geometric","class":"Subsurface","aff":"Neutral","deg":null,"bda":null},{"cp":"E07A","ch":"\ue07a","name":"geo.CommandShip.Friend","cat":"geometric","class":"CommandShip","aff":"Friend","deg":null,"bda":null},{"cp":"E07B","ch":"\ue07b","name":"geo.CommandShip.Enemy","cat":"geometric","class":"CommandShip","aff":"Enemy","deg":null,"bda":null},{"cp":"E07C","ch":"\ue07c","name":"geo.CommandShip.Unknown","cat":"geometric","class":"CommandShip","aff":"Unknown","deg":null,"bda":null},{"cp":"E07D","ch":"\ue07d","name":"geo.CommandShip.Neutral","cat":"geometric","class":"CommandShip","aff":"Neutral","deg":null,"bda":null},{"cp":"E07E","ch":"\ue07e","name":"geo.Land.Friend","cat":"geometric","class":"Land","aff":"Friend","deg":null,"bda":null},{"cp":"E07F","ch":"\ue07f","name":"geo.Land.Enemy","cat":"geometric","class":"Land","aff":"Enemy","deg":null,"bda":null},{"cp":"E080","ch":"\ue080","name":"geo.Land.Unknown","cat":"geometric","class":"Land","aff":"Unknown","deg":null,"bda":null},{"cp":"E081","ch":"\ue081","name":"geo.Land.Neutral","cat":"geometric","class":"Land","aff":"Neutral","deg":null,"bda":null},{"cp":"E082","ch":"\ue082","name":"geo.Missile.Friend","cat":"geometric","class":"Missile","aff":"Friend","deg":null,"bda":null},{"cp":"E083","ch":"\ue083","name":"geo.Missile.Enemy","cat":"geometric","class":"Missile","aff":"Enemy","deg":null,"bda":null},{"cp":"E084","ch":"\ue084","name":"geo.Missile.Unknown","cat":"geometric","class":"Missile","aff":"Unknown","deg":null,"bda":null},{"cp":"E085","ch":"\ue085","name":"geo.Missile.Neutral","cat":"geometric","class":"Missile","aff":"Neutral","deg":null,"bda":null},{"cp":"E086","ch":"\ue086","name":"geo.Torpedo.Friend","cat":"geometric","class":"Torpedo","aff":"Friend","deg":null,"bda":null},{"cp":"E087","ch":"\ue087","name":"geo.Torpedo.Enemy","cat":"geometric","class":"Torpedo","aff":"Enemy","deg":null,"bda":null},{"cp":"E088","ch":"\ue088","name":"geo.Torpedo.Unknown","cat":"geometric","class":"Torpedo","aff":"Unknown","deg":null,"bda":null},{"cp":"E089","ch":"\ue089","name":"geo.Torpedo.Neutral","cat":"geometric","class":"Torpedo","aff":"Neutral","deg":null,"bda":null},{"cp":"E08A","ch":"\ue08a","name":"group.Air.Friend","cat":"group","class":"Air","aff":"Friend","deg":null,"bda":null},{"cp":"E08B","ch":"\ue08b","name":"group.Air.Enemy","cat":"group","class":"Air","aff":"Enemy","deg":null,"bda":null},{"cp":"E08C","ch":"\ue08c","name":"group.Air.Unknown","cat":"group","class":"Air","aff":"Unknown","deg":null,"bda":null},{"cp":"E08D","ch":"\ue08d","name":"group.Air.Neutral","cat":"group","class":"Air","aff":"Neutral","deg":null,"bda":null},{"cp":"E08E","ch":"\ue08e","name":"group.Surface.Friend","cat":"group","class":"Surface","aff":"Friend","deg":null,"bda":null},{"cp":"E08F","ch":"\ue08f","name":"group.Surface.Enemy","cat":"group","class":"Surface","aff":"Enemy","deg":null,"bda":null},{"cp":"E090","ch":"\ue090","name":"group.Surface.Unknown","cat":"group","class":"Surface","aff":"Unknown","deg":null,"bda":null},{"cp":"E091","ch":"\ue091","name":"group.Surface.Neutral","cat":"group","class":"Surface","aff":"Neutral","deg":null,"bda":null},{"cp":"E092","ch":"\ue092","name":"group.Submarine.Friend","cat":"group","class":"Submarine","aff":"Friend","deg":null,"bda":null},{"cp":"E093","ch":"\ue093","name":"group.Submarine.Enemy","cat":"group","class":"Submarine","aff":"Enemy","deg":null,"bda":null},{"cp":"E094","ch":"\ue094","name":"group.Submarine.Unknown","cat":"group","class":"Submarine","aff":"Unknown","deg":null,"bda":null},{"cp":"E095","ch":"\ue095","name":"group.Submarine.Neutral","cat":"group","class":"Submarine","aff":"Neutral","deg":null,"bda":null},{"cp":"E096","ch":"\ue096","name":"geo.group.Air.Friend","cat":"group-geo","class":"Air","aff":"Friend","deg":null,"bda":null},{"cp":"E097","ch":"\ue097","name":"geo.group.Air.Enemy","cat":"group-geo","class":"Air","aff":"Enemy","deg":null,"bda":null},{"cp":"E098","ch":"\ue098","name":"geo.group.Air.Unknown","cat":"group-geo","class":"Air","aff":"Unknown","deg":null,"bda":null},{"cp":"E099","ch":"\ue099","name":"geo.group.Air.Neutral","cat":"group-geo","class":"Air","aff":"Neutral","deg":null,"bda":null},{"cp":"E09A","ch":"\ue09a","name":"geo.group.Surface.Friend","cat":"group-geo","class":"Surface","aff":"Friend","deg":null,"bda":null},{"cp":"E09B","ch":"\ue09b","name":"geo.group.Surface.Enemy","cat":"group-geo","class":"Surface","aff":"Enemy","deg":null,"bda":null},{"cp":"E09C","ch":"\ue09c","name":"geo.group.Surface.Unknown","cat":"group-geo","class":"Surface","aff":"Unknown","deg":null,"bda":null},{"cp":"E09D","ch":"\ue09d","name":"geo.group.Surface.Neutral","cat":"group-geo","class":"Surface","aff":"Neutral","deg":null,"bda":null},{"cp":"E09E","ch":"\ue09e","name":"geo.group.Submarine.Friend","cat":"group-geo","class":"Submarine","aff":"Friend","deg":null,"bda":null},{"cp":"E09F","ch":"\ue09f","name":"geo.group.Submarine.Enemy","cat":"group-geo","class":"Submarine","aff":"Enemy","deg":null,"bda":null},{"cp":"E0A0","ch":"\ue0a0","name":"geo.group.Submarine.Unknown","cat":"group-geo","class":"Submarine","aff":"Unknown","deg":null,"bda":null},{"cp":"E0A1","ch":"\ue0a1","name":"geo.group.Submarine.Neutral","cat":"group-geo","class":"Submarine","aff":"Neutral","deg":null,"bda":null},{"cp":"E0A2","ch":"\ue0a2","name":"Unknown.Friend","cat":"unknown","class":null,"aff":"Friend","deg":null,"bda":null},{"cp":"E0A3","ch":"\ue0a3","name":"Unknown.Enemy","cat":"unknown","class":null,"aff":"Enemy","deg":null,"bda":null},{"cp":"E0A4","ch":"\ue0a4","name":"Unknown.Unknown","cat":"unknown","class":null,"aff":"Unknown","deg":null,"bda":null},{"cp":"E0A5","ch":"\ue0a5","name":"Unknown.Neutral","cat":"unknown","class":null,"aff":"Neutral","deg":null,"bda":null},{"cp":"E0A6","ch":"\ue0a6","name":"geo.Unknown.Friend","cat":"unknown-geo","class":null,"aff":"Friend","deg":null,"bda":null},{"cp":"E0A7","ch":"\ue0a7","name":"geo.Unknown.Enemy","cat":"unknown-geo","class":null,"aff":"Enemy","deg":null,"bda":null},{"cp":"E0A8","ch":"\ue0a8","name":"geo.Unknown.Unknown","cat":"unknown-geo","class":null,"aff":"Unknown","deg":null,"bda":null},{"cp":"E0A9","ch":"\ue0a9","name":"geo.Unknown.Neutral","cat":"unknown-geo","class":null,"aff":"Neutral","deg":null,"bda":null}];
+const AFF_COLOR = { Friend: "#4aa3ff", Enemy: "#ff5a5a", Unknown: "#ffd23f", Neutral: "#4ade80" };
+const NEUTRAL = "#8b949e";
+const CAT_ORDER = [
+  ["symbol", "Symbols"], ["geometric", "Geometric variants"],
+  ["group", "Groups"], ["group-geo", "Group geometric"],
+  ["unknown", "Unknown class"], ["unknown-geo", "Unknown geometric"],
+  ["heading", "Heading vectors"], ["bda", "BDA decorations"],
+];
+const colorFor = g => g.aff ? AFF_COLOR[g.aff] : NEUTRAL;
+function copyText(t, el) {
+  navigator.clipboard.writeText(t).then(() => {
+    el.classList.add("copied");
+    setTimeout(() => el.classList.remove("copied"), 700);
+  });
+}
+
+// --- grid ---
+const grid = document.getElementById("grid");
+const cards = [];
+for (const [cat, label] of CAT_ORDER) {
+  const items = GLYPHS.filter(g => g.cat === cat);
+  if (!items.length) continue;
+  const sec = document.createElement("section");
+  sec.className = "cat";
+  const h = document.createElement("h2");
+  h.textContent = label + " · " + items.length;
+  sec.appendChild(h);
+  const wrap = document.createElement("div");
+  wrap.className = "cards";
+  for (const g of items) {
+    const cp = "U+" + g.cp;
+    const card = document.createElement("button");
+    card.className = "card";
+    card.type = "button";
+    card.title = "Copy " + cp;
+    const gl = document.createElement("span");
+    gl.className = "glyph";
+    gl.style.color = colorFor(g);
+    gl.textContent = g.ch;
+    const c = document.createElement("span");
+    c.className = "cp";
+    c.textContent = cp;
+    const n = document.createElement("span");
+    n.className = "name";
+    n.textContent = g.name;
+    card.append(gl, c, n);
+    card.addEventListener("click", () => copyText(cp, card));
+    wrap.appendChild(card);
+    cards.push({ el: card, g, hay: (g.name + " " + cp).toLowerCase() });
+  }
+  sec.appendChild(wrap);
+  grid.appendChild(sec);
+}
+
+// --- search + affiliation filter ---
+const search = document.getElementById("search");
+const affState = { Friend: true, Enemy: true, Unknown: true, Neutral: true };
+function applyFilter() {
+  const q = search.value.trim().toLowerCase();
+  for (const c of cards) {
+    const matchText = !q || c.hay.includes(q);
+    const matchAff = !c.g.aff || affState[c.g.aff];
+    c.el.classList.toggle("hidden", !(matchText && matchAff));
+  }
+  document.querySelectorAll("section.cat").forEach(sec => {
+    sec.classList.toggle("hidden", sec.querySelectorAll(".card:not(.hidden)").length === 0);
+  });
+}
+search.addEventListener("input", applyFilter);
+document.querySelectorAll(".aff-toggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const a = btn.dataset.aff;
+    affState[a] = !affState[a];
+    btn.classList.toggle("off", !affState[a]);
+    applyFilter();
+  });
+});
+
+// --- composition demo ---
+const dClass = document.getElementById("demo-class");
+const dAff = document.getElementById("demo-aff");
+const dHeading = document.getElementById("demo-heading");
+const dHeadingOut = document.getElementById("demo-heading-out");
+const dBda = document.getElementById("demo-bda");
+const dPreview = document.getElementById("demo-preview");
+const dCodes = document.getElementById("demo-codes");
+const dCopy = document.getElementById("demo-copy");
+
+for (const cls of [...new Set(GLYPHS.filter(g => g.cat === "symbol").map(g => g.class))]) {
+  dClass.add(new Option(cls, cls));
+}
+for (const a of ["Friend", "Enemy", "Unknown", "Neutral"]) dAff.add(new Option(a, a));
+dClass.value = "Surface";
+dAff.value = "Friend";
+
+const find = (cat, pred) => GLYPHS.find(g => g.cat === cat && pred(g));
+function updateDemo() {
+  const base = find("symbol", g => g.class === dClass.value && g.aff === dAff.value);
+  const useBda = dBda.value !== "None";
+  dHeading.disabled = useBda;
+  const deg = parseInt(dHeading.value, 10);
+  dHeadingOut.textContent = String(deg).padStart(3, "0") + "°";
+  const overlay = useBda
+    ? find("bda", g => g.bda === dBda.value)
+    : find("heading", g => g.deg === deg);
+  dPreview.style.color = AFF_COLOR[dAff.value];
+  dPreview.textContent = base.ch + (overlay ? overlay.ch : "");
+  const codes = ["U+" + base.cp].concat(overlay ? ["U+" + overlay.cp] : []).join(" ");
+  dCodes.textContent = codes;
+  dCopy.onclick = () => copyText(codes, dCopy);
+}
+[dClass, dAff, dHeading, dBda].forEach(el => el.addEventListener("input", updateDemo));
+updateDemo();
+</script>
+</body>
+</html>
