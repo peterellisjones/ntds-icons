@@ -10,3 +10,18 @@ categories = ["graphics", "rendering"]
 
 [lib]
 doctest = false
+
+[features]
+# Font generation (TTF/WOFF2/specimen). Off by default so the published crate's
+# default graph is std-only.
+build = ["dep:kurbo", "dep:write-fonts"]
+
+[dependencies]
+# All generation deps are optional, enabled only by the `build` feature.
+# Versions match dronecom's resolved kurbo/write-fonts so generated outlines
+# stay byte-equivalent.
+kurbo = { version = "0.13", optional = true }
+write-fonts = { version = "0.49", optional = true }
+
+[dev-dependencies]
+skrifa = "0.42"

@@ -9,8 +9,14 @@
 //!   codepoint assignment.
 //! - [`codepoints`] — `char`-returning glyph lookups on the crate's own enums.
 //!
-//! The pre-built font and the font generator are added in subsequent tasks.
+//! - [`build`] (feature `build`) — the font generator: `build_font`, WOFF2, and
+//!   specimen rendering. Pulls kurbo/write-fonts; off by default.
+//!
+//! The committed pre-built font (`FONT_TTF`) is added in a subsequent task.
 
 pub mod codepoints;
 pub mod layout;
 pub mod shapes;
+
+#[cfg(feature = "build")]
+pub mod build;
