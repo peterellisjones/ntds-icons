@@ -77,43 +77,47 @@ fn command_ship_has_carrier_lines() {
     }
 }
 
+/// Each helicopter ear is a single connected polyline (perimeter → corner →
+/// rotor tip), so the bend at the corner strokes as one mitered join instead of
+/// two abutting segments that leave a crack. The rotor tip overshoots the
+/// bounding box (|x| > r), which uniquely identifies the two ear strips among
+/// the base-shape outlines. For every affiliation except Unknown (whose square
+/// already reaches the corner) the corner is the strip's interior vertex; the
+/// ear's diagonal back to the outline must be non-degenerate.
 #[test]
-fn helicopter_has_ear_lines() {
+fn helicopter_ears_are_connected_polylines() {
+    let r = 100.0;
     for aff in ShapeAffiliation::ALL {
-        let cmds = describe_symbol(NtdsShapeClass::Helicopter, aff, 0.0, 0.0, 100.0);
-        // 4 ear lines: left ear, right ear, left rotor, right rotor
-        let line_count = cmds.iter().filter(|c| matches!(c, ShapeCmd::Line { .. })).count();
-        assert!(
-            line_count >= 4,
-            "expected at least 4 Line commands (ears + rotors) for Helicopter/{aff:?}, got \
-             {line_count}"
-        );
-    }
-}
-
-/// The angled ear must connect the flat rotor back to the symbol outline. For
-/// every affiliation except Unknown (whose square already reaches the corner),
-/// that diagonal must be non-degenerate. Helicopter base shapes emit no `Line`
-/// commands, so the first two `Line`s are exactly the left and right ears.
-#[test]
-fn helicopter_ears_are_non_degenerate() {
-    for aff in ShapeAffiliation::ALL {
-        let cmds = describe_symbol(NtdsShapeClass::Helicopter, aff, 0.0, 0.0, 100.0);
-        let ears: Vec<(f32, f32, f32, f32)> = cmds
+        let cmds = describe_symbol(NtdsShapeClass::Helicopter, aff, 0.0, 0.0, r);
+        let ears: Vec<Vec<[f32; 2]>> = cmds
             .iter()
             .filter_map(|c| match c {
-                ShapeCmd::Line { x1, y1, x2, y2 } => Some((*x1, *y1, *x2, *y2)),
+                ShapeCmd::LineStrip(pts) if pts.iter().any(|p| p[0].abs() > r + 0.5) => {
+                    Some(pts.clone())
+                }
                 _ => None,
             })
-            .take(2)
             .collect();
-        assert_eq!(ears.len(), 2, "expected two ear lines for Helicopter/{aff:?}");
-        for (x1, y1, x2, y2) in ears {
-            let len = ((x2 - x1).powi(2) + (y2 - y1).powi(2)).sqrt();
-            if aff == ShapeAffiliation::Unknown {
-                continue; // square reaches the corner — degenerate ear is expected
+        assert_eq!(ears.len(), 2, "expected two ear polylines for Helicopter/{aff:?}");
+        for pts in ears {
+            // No zero-length segment anywhere in the strip.
+            for w in pts.windows(2) {
+                let d = ((w[1][0] - w[0][0]).powi(2) + (w[1][1] - w[0][1]).powi(2)).sqrt();
+                assert!(d > 0.5, "degenerate segment in ear polyline for Helicopter/{aff:?}");
             }
-            assert!(len > 1.0, "ear line for Helicopter/{aff:?} is degenerate (len {len})");
+            if aff == ShapeAffiliation::Unknown {
+                // Square reaches the corner: rotor only, no knee.
+                assert_eq!(pts.len(), 2, "Unknown ear should be a 2-point rotor, got {}", pts.len());
+            } else {
+                // perimeter → corner → rotor tip: the corner is the interior vertex.
+                assert_eq!(pts.len(), 3, "ear should be a 3-point polyline for {aff:?}");
+                let corner = pts[1];
+                assert!(
+                    (corner[1] - r).abs() < 0.5 && (corner[0].abs() - r).abs() < 0.5,
+                    "ear's interior vertex should be the bounding-box corner for {aff:?}, got \
+                     {corner:?}"
+                );
+            }
         }
     }
 }

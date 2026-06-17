@@ -623,6 +623,11 @@ fn emit_carrier_lines(cmds: &mut Vec<ShapeCmd>, aff: ShapeAffiliation, cx: f32, 
 /// the diagonal): the circle is met at its 45° point, the diamond at its edge
 /// midpoint, the cross at its inner notch vertex, and the square already reaches
 /// the corner (inset 1.0 → zero-length ear).
+///
+/// Each ear is emitted as a single connected polyline (perimeter → corner →
+/// rotor tip) so the bend at the corner strokes as one mitered join. Two
+/// abutting [`ShapeCmd::Line`] segments would each get butt end-caps at the
+/// shared corner, leaving a crack on the outside of the knee.
 fn emit_helicopter_ears(cmds: &mut Vec<ShapeCmd>, aff: ShapeAffiliation, cx: f32, cy: f32, r: f32) {
     let left_tip = [cx - r, cy + r];
     let right_tip = [cx + r, cy + r];
@@ -638,34 +643,17 @@ fn emit_helicopter_ears(cmds: &mut Vec<ShapeCmd>, aff: ShapeAffiliation, cx: f32
 
     let rotor = r * 0.3;
 
-    // Left ear line
-    cmds.push(ShapeCmd::Line {
-        x1: left_base[0],
-        y1: left_base[1],
-        x2: left_tip[0],
-        y2: left_tip[1],
-    });
-    // Right ear line
-    cmds.push(ShapeCmd::Line {
-        x1: right_base[0],
-        y1: right_base[1],
-        x2: right_tip[0],
-        y2: right_tip[1],
-    });
-    // Left rotor
-    cmds.push(ShapeCmd::Line {
-        x1: left_tip[0],
-        y1: left_tip[1],
-        x2: left_tip[0] - rotor,
-        y2: left_tip[1],
-    });
-    // Right rotor
-    cmds.push(ShapeCmd::Line {
-        x1: right_tip[0],
-        y1: right_tip[1],
-        x2: right_tip[0] + rotor,
-        y2: right_tip[1],
-    });
+    // Left ear: base → corner → rotor tip. When the base coincides with the
+    // corner (square, inset 1.0) the leading point is dropped, leaving just the
+    // rotor.
+    let mut left = vec![left_base, left_tip, [left_tip[0] - rotor, left_tip[1]]];
+    left.dedup();
+    cmds.push(ShapeCmd::LineStrip(left));
+
+    // Right ear: mirror of the left.
+    let mut right = vec![right_base, right_tip, [right_tip[0] + rotor, right_tip[1]]];
+    right.dedup();
+    cmds.push(ShapeCmd::LineStrip(right));
 }
 
 /// Letter 'M' drawn with line segments.
