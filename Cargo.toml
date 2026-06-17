@@ -14,7 +14,7 @@ doctest = false
 [features]
 # Font generation (TTF/WOFF2/specimen). Off by default so the published crate's
 # default graph is std-only.
-build = ["dep:kurbo", "dep:write-fonts", "dep:ttf2woff2", "dep:resvg"]
+build = ["dep:kurbo", "dep:write-fonts", "dep:ttf2woff2", "dep:resvg", "dep:clap"]
 
 [dependencies]
 # All generation deps are optional, enabled only by the `build` feature.
@@ -24,6 +24,12 @@ kurbo = { version = "0.13", optional = true }
 write-fonts = { version = "0.49", optional = true }
 ttf2woff2 = { version = "0.10", optional = true }
 resvg = { version = "0.45", optional = true }
+clap = { version = "4", features = ["derive"], optional = true }
 
 [dev-dependencies]
 skrifa = "0.42"
+
+[[bin]]
+name = "ntds-font-gen"
+path = "src/bin/ntds-font-gen.rs"
+required-features = ["build"]
