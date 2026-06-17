@@ -5,7 +5,7 @@
 //! — so the font generator and direct-drawing consumers (map gizmos, SVG
 //! export) share one geometry definition.
 
-use std::f32::consts::{FRAC_PI_2, PI};
+use std::f32::consts::{FRAC_1_SQRT_2, FRAC_PI_2, PI};
 
 // ---------------------------------------------------------------------------
 // Public enums
@@ -614,18 +614,27 @@ fn emit_carrier_lines(cmds: &mut Vec<ShapeCmd>, aff: ShapeAffiliation, cx: f32, 
     cmds.push(ShapeCmd::Line { x1: cx + dx, y1: cy - h, x2: cx + dx, y2: cy + h });
 }
 
-/// Helicopter "ears" — angled lines from bounding-box corners to the symbol body,
-/// plus short horizontal "rotor" lines.
+/// Helicopter "ears" — angled lines from the symbol perimeter out to the
+/// bounding-box corners, plus short horizontal "rotor" lines.
+///
+/// Each ear runs diagonally (45°) from a top corner inward until it meets the
+/// affiliation outline, so the flat rotor is always tied back to the symbol
+/// body. The meeting point differs per shape via `inset` (fraction of `r` along
+/// the diagonal): the circle is met at its 45° point, the diamond at its edge
+/// midpoint, the cross at its inner notch vertex, and the square already reaches
+/// the corner (inset 1.0 → zero-length ear).
 fn emit_helicopter_ears(cmds: &mut Vec<ShapeCmd>, aff: ShapeAffiliation, cx: f32, cy: f32, r: f32) {
     let left_tip = [cx - r, cy + r];
     let right_tip = [cx + r, cy + r];
 
-    let (left_base, right_base) = match aff {
-        ShapeAffiliation::Friend | ShapeAffiliation::Unknown | ShapeAffiliation::Neutral => {
-            ([cx - r, cy + r], [cx + r, cy + r])
-        }
-        ShapeAffiliation::Enemy => ([cx - r * 0.5, cy + r * 0.5], [cx + r * 0.5, cy + r * 0.5]),
+    let inset = match aff {
+        ShapeAffiliation::Friend => FRAC_1_SQRT_2,
+        ShapeAffiliation::Enemy => 0.5,
+        ShapeAffiliation::Neutral => CROSS_INSET,
+        ShapeAffiliation::Unknown => 1.0,
     };
+    let left_base = [cx - r * inset, cy + r * inset];
+    let right_base = [cx + r * inset, cy + r * inset];
 
     let rotor = r * 0.3;
 
@@ -678,8 +687,8 @@ fn emit_letter_t(cmds: &mut Vec<ShapeCmd>, cx: f32, cy: f32, r: f32) {
     let s = r * 0.4;
     // Horizontal bar
     cmds.push(ShapeCmd::Line { x1: cx - s, y1: cy, x2: cx + s, y2: cy });
-    // Vertical stem
-    cmds.push(ShapeCmd::Line { x1: cx, y1: cy, x2: cx, y2: cy - s });
+    // Vertical stem — full height matches the missile 'M' (2 * s), which spans cy - s .. cy + s.
+    cmds.push(ShapeCmd::Line { x1: cx, y1: cy, x2: cx, y2: cy - s * 2.0 });
 }
 
 /// Small filled dot at center.
