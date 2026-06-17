@@ -683,12 +683,16 @@ fn emit_letter_m(cmds: &mut Vec<ShapeCmd>, cx: f32, cy: f32, r: f32) {
 }
 
 /// Letter 'T' drawn with two line segments.
+///
+/// Vertically centered on `cy` and the same height as the missile 'M' (spans
+/// `cy - s` .. `cy + s`), so the two letters read as a matched pair rather than
+/// the T hanging below the centerline.
 fn emit_letter_t(cmds: &mut Vec<ShapeCmd>, cx: f32, cy: f32, r: f32) {
     let s = r * 0.4;
-    // Horizontal bar
-    cmds.push(ShapeCmd::Line { x1: cx - s, y1: cy, x2: cx + s, y2: cy });
-    // Vertical stem — full height matches the missile 'M' (2 * s), which spans cy - s .. cy + s.
-    cmds.push(ShapeCmd::Line { x1: cx, y1: cy, x2: cx, y2: cy - s * 2.0 });
+    // Horizontal bar across the top.
+    cmds.push(ShapeCmd::Line { x1: cx - s, y1: cy + s, x2: cx + s, y2: cy + s });
+    // Vertical stem from the bar down to the bottom.
+    cmds.push(ShapeCmd::Line { x1: cx, y1: cy + s, x2: cx, y2: cy - s });
 }
 
 /// Small filled dot at center.

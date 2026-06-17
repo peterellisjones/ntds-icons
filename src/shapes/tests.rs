@@ -118,11 +118,14 @@ fn helicopter_ears_are_non_degenerate() {
     }
 }
 
-/// The torpedo 'T' stem should stand as tall as the missile 'M', not half its height.
+/// The torpedo 'T' should be vertically centered on cy and the same height as
+/// the missile 'M' — not hanging entirely below the centerline. (Friend bases
+/// are an Arc, so the T's only `Line`s are its bar + stem, and the M is the
+/// 5-point LineStrip.)
 #[test]
-fn torpedo_t_stem_matches_missile_m_height() {
+fn torpedo_t_is_centered_like_missile_m() {
     let r = 100.0;
-    // Missile M: 5-point LineStrip; its height is max(y) - min(y).
+
     let m = describe_symbol(NtdsShapeClass::Missile, ShapeAffiliation::Friend, 0.0, 0.0, r);
     let m_pts = m
         .iter()
@@ -133,19 +136,28 @@ fn torpedo_t_stem_matches_missile_m_height() {
         .expect("expected a 5-point LineStrip (letter M)");
     let m_min = m_pts.iter().map(|p| p[1]).fold(f32::INFINITY, f32::min);
     let m_max = m_pts.iter().map(|p| p[1]).fold(f32::NEG_INFINITY, f32::max);
-    let m_height = m_max - m_min;
 
-    // Torpedo T: the vertical stem is the Line with x1 == x2.
     let t = describe_symbol(NtdsShapeClass::Torpedo, ShapeAffiliation::Friend, 0.0, 0.0, r);
-    let stem = t
+    let t_ys: Vec<f32> = t
         .iter()
-        .find_map(|c| match c {
-            ShapeCmd::Line { x1, y1, x2, y2 } if (x1 - x2).abs() < f32::EPSILON => Some((y2 - y1).abs()),
-            _ => None,
+        .flat_map(|c| match c {
+            ShapeCmd::Line { y1, y2, .. } => vec![*y1, *y2],
+            _ => vec![],
         })
-        .expect("expected a vertical stem Line for the T");
+        .collect();
+    let t_min = t_ys.iter().copied().fold(f32::INFINITY, f32::min);
+    let t_max = t_ys.iter().copied().fold(f32::NEG_INFINITY, f32::max);
 
-    assert!((stem - m_height).abs() < 1.0, "T stem ({stem}) should match M height ({m_height})");
+    // Both letters straddle cy = 0 (mid-extent ≈ 0).
+    assert!((m_min + m_max).abs() < 1.0, "M not centered on cy: [{m_min}, {m_max}]");
+    assert!((t_min + t_max).abs() < 1.0, "T not centered on cy: [{t_min}, {t_max}]");
+    // And span comparable heights.
+    assert!(
+        ((t_max - t_min) - (m_max - m_min)).abs() < 1.0,
+        "T height ({}) should match M height ({})",
+        t_max - t_min,
+        m_max - m_min
+    );
 }
 
 #[test]
