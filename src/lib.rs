@@ -7,9 +7,10 @@
 //!   symbol (zero dependencies), for direct drawing (map gizmos, SVG export).
 //! - [`layout`] — the single source of truth for the glyph set and its PUA
 //!   codepoint assignment.
+//! - [`codepoints`] — `char`-returning glyph lookups on the crate's own enums.
 //!
-//! The codepoint lookups, the pre-built font, and the font generator are added
-//! in subsequent tasks.
+//! The pre-built font and the font generator are added in subsequent tasks.
 
+pub mod codepoints;
 pub mod layout;
 pub mod shapes;
