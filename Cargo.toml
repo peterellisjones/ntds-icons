@@ -1,0 +1,12 @@
+[package]
+name = "ntds-icons"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+description = "NTDS (Naval Tactical Data System) tactical-symbol outline icon font and geometry."
+repository = "https://github.com/peterellisjones/ntds-icons"
+keywords = ["ntds", "font", "icons", "tactical", "symbology"]
+categories = ["graphics", "rendering"]
+
+[lib]
+doctest = false
