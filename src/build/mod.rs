@@ -4,7 +4,9 @@
 //! in later modules) that the default, font-consuming build does not need.
 
 mod font;
+mod specimen;
 mod woff2;
 
 pub use font::{FontLayout, FontNames, build_font};
+pub use specimen::render_specimen;
 pub use woff2::to_woff2;
