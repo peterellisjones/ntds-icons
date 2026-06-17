@@ -290,24 +290,6 @@ cargo run --features build --bin ntds-font-gen
 `build_font(&FontLayout::default())` reproduces the committed `ntds_icons.ttf`
 byte-for-byte (enforced by a drift test).
 
-### Maintainer setup (Pages + releases)
-
-The gallery deploys via GitHub Actions to the custom domain
-**[ntds.dronecomgame.com](https://ntds.dronecomgame.com)**. **One-time setup:**
-
-1. Add a DNS **CNAME** record: `ntds.dronecomgame.com` → `peterellisjones.github.io`.
-2. In repo Settings → Pages, set **Source: GitHub Actions** and **Custom
-   domain:** `ntds.dronecomgame.com` (Enforce HTTPS once the cert provisions).
-
-`pages.yml` writes a `CNAME` into the published site on every deploy, so the
-custom domain persists. After setup:
-
-- **Gallery** — `.github/workflows/pages.yml` regenerates the site and deploys
-  it on every push to `main`.
-- **Releases** — `.github/workflows/release.yml` fires on a `vX.Y.Z` tag: it
-  drift-checks the committed TTF against a fresh build, then publishes a GitHub
-  Release with `ntds_icons.ttf` + `.woff2` attached.
-
 ## Licenses
 
 The two are independent:
