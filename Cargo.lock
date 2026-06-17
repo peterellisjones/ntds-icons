@@ -441,7 +441,7 @@ dependencies = [
 
 [[package]]
 name = "ntds-icons"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "clap",
  "kurbo 0.13.1",
