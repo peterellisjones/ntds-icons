@@ -5,8 +5,11 @@
 //!
 //! - [`shapes`] — pure-geometry [`shapes::ShapeCmd`] descriptions of every NTDS
 //!   symbol (zero dependencies), for direct drawing (map gizmos, SVG export).
+//! - [`layout`] — the single source of truth for the glyph set and its PUA
+//!   codepoint assignment.
 //!
 //! The codepoint lookups, the pre-built font, and the font generator are added
 //! in subsequent tasks.
 
+pub mod layout;
 pub mod shapes;
