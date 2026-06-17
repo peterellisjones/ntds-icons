@@ -6,7 +6,7 @@ WOFF2 icon font with a documented Private-Use-Area codepoint map.
 
 ![NTDS Icons specimen](assets/specimen.png)
 
-**▶ Browse the live gallery — [peterellisjones.github.io/ntds-icons](https://peterellisjones.github.io/ntds-icons/)** — every glyph rendered in the font, affiliation-colored, with click-to-copy codepoints, search/filter, and a base + heading-vector + BDA **composition demo**.
+**▶ Browse the live gallery — [ntds.dronecomgame.com](https://ntds.dronecomgame.com)** — every glyph rendered in the font, affiliation-colored, with click-to-copy codepoints, search/filter, and a base + heading-vector + BDA **composition demo**.
 
 ## What this is — and the gap it fills
 
@@ -292,11 +292,18 @@ byte-for-byte (enforced by a drift test).
 
 ### Maintainer setup (Pages + releases)
 
-The gallery deploys via GitHub Actions. **One-time:** in repo Settings → Pages,
-set **Source: GitHub Actions**. After that:
+The gallery deploys via GitHub Actions to the custom domain
+**[ntds.dronecomgame.com](https://ntds.dronecomgame.com)**. **One-time setup:**
+
+1. Add a DNS **CNAME** record: `ntds.dronecomgame.com` → `peterellisjones.github.io`.
+2. In repo Settings → Pages, set **Source: GitHub Actions** and **Custom
+   domain:** `ntds.dronecomgame.com` (Enforce HTTPS once the cert provisions).
+
+`pages.yml` writes a `CNAME` into the published site on every deploy, so the
+custom domain persists. After setup:
 
 - **Gallery** — `.github/workflows/pages.yml` regenerates the site and deploys
-  it to Pages on every push to `main`.
+  it on every push to `main`.
 - **Releases** — `.github/workflows/release.yml` fires on a `vX.Y.Z` tag: it
   drift-checks the committed TTF against a fresh build, then publishes a GitHub
   Release with `ntds_icons.ttf` + `.woff2` attached.

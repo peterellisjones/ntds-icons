@@ -23,6 +23,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Generate gallery + assets
         run: cargo run --features build --bin ntds-font-gen -- --out-dir dist
+      - name: Set custom domain
+        run: echo "ntds.dronecomgame.com" > dist/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
