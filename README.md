@@ -295,10 +295,3 @@ The two are independent:
   1.1](OFL.txt), reserved font name "NTDS Icons".
 - **Crate** (the Rust code) — [MIT](LICENSE-MIT) or
   [Apache-2.0](LICENSE-APACHE), at your option.
-
-## Roadmap
-
-Planned follow-ups: a GitHub Pages gallery with live `@font-face` glyphs and a
-base + heading + BDA composition demo; tagged GitHub Releases publishing the
-`.ttf` / `.woff2`; an npm package; and an `egui-ntds` integration mirroring
-`egui-phosphor`.
