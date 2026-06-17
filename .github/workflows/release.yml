@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Regenerate committed artifacts
+        run: cargo run --features build --bin ntds-font-gen -- --out-dir assets
+      # Guard that the tagged commit's committed font is fresh. Only the TTF is
+      # asserted — it is deterministic (write-fonts). The woff2/specimen are
+      # regenerated above and attached fresh, so they need no byte-equality gate.
+      - name: Drift check (committed TTF must match a fresh build)
+        run: git diff --exit-code -- assets/ntds_icons.ttf
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            assets/ntds_icons.ttf
+            assets/ntds_icons.woff2
+          generate_release_notes: true

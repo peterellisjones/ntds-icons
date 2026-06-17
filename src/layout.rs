@@ -61,6 +61,21 @@ impl GlyphKey {
             | GlyphKey::UnknownGeometric { .. } => Advance::Full,
         }
     }
+
+    /// The affiliation this glyph belongs to, or `None` for the
+    /// affiliation-agnostic overlays (BDA, heading).
+    #[must_use]
+    pub fn affiliation(self) -> Option<ShapeAffiliation> {
+        match self {
+            GlyphKey::Base { aff, .. }
+            | GlyphKey::Geometric { aff, .. }
+            | GlyphKey::Group { aff, .. }
+            | GlyphKey::GroupGeometric { aff, .. }
+            | GlyphKey::Unknown { aff }
+            | GlyphKey::UnknownGeometric { aff } => Some(aff),
+            GlyphKey::Bda(_) | GlyphKey::Heading(_) => None,
+        }
+    }
 }
 
 /// Every glyph in cmap / glyph-id order.
@@ -188,6 +203,18 @@ mod tests {
         );
         assert_eq!(codepoint(GlyphKey::Unknown { aff: Friend }) as u32, 0xE0A2);
         assert_eq!(codepoint(GlyphKey::UnknownGeometric { aff: Friend }) as u32, 0xE0A6);
+    }
+
+    #[test]
+    fn affiliation_some_for_symbols_none_for_overlays() {
+        use ShapeAffiliation::Friend;
+        assert_eq!(
+            GlyphKey::Base { class: NtdsShapeClass::Air, aff: Friend }.affiliation(),
+            Some(Friend)
+        );
+        assert_eq!(GlyphKey::Unknown { aff: Friend }.affiliation(), Some(Friend));
+        assert_eq!(GlyphKey::Bda(BdaDecoration::Uncertain).affiliation(), None);
+        assert_eq!(GlyphKey::Heading(3).affiliation(), None);
     }
 
     #[test]

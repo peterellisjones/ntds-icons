@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NTDS Icons — naval tactical symbol font</title>
+<meta name="description" content="An installable NTDS (Naval Tactical Data System) outline tactical-symbol icon font.">
+<style>
+  @font-face {
+    font-family: "NTDS Icons";
+    src: url("__WOFF2_HREF__") format("woff2");
+    font-display: block;
+  }
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2330;
+    --border: #30363d;
+    --ink: #c9d1d9;
+    --dim: #8b949e;
+    --accent: #58a6ff;
+    --friend: #4aa3ff;
+    --enemy: #ff5a5a;
+    --unknown: #ffd23f;
+    --neutral: #4ade80;
+    --mono: ui-monospace, "SF Mono", "B612 Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+  header h1 { font-family: var(--mono); font-size: 30px; margin: 0 0 6px; letter-spacing: .5px; }
+  header .glyph-mark { color: var(--friend); }
+  header p { color: var(--dim); margin: 0 0 14px; }
+  header .links a { color: var(--accent); text-decoration: none; margin-right: 16px; font-size: 14px; }
+  header .links a:hover { text-decoration: underline; }
+  h2 { font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+       color: var(--dim); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin: 36px 0 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; }
+
+  /* Composition demo */
+  #demo { padding: 20px; margin-top: 24px; display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+  #demo .controls label { display: block; font-size: 12px; color: var(--dim); margin: 12px 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+  #demo .controls label:first-child { margin-top: 0; }
+  #demo select, #demo input[type=range] { width: 100%; }
+  #demo select {
+    background: var(--panel-2); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 3px; padding: 6px 8px; font: inherit;
+  }
+  #demo .heading-row { display: flex; align-items: center; gap: 10px; }
+  #demo .heading-row output { font-family: var(--mono); color: var(--ink); min-width: 44px; }
+  #demo input:disabled { opacity: .35; }
+  #demo .stage { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #demo-preview { font-family: "NTDS Icons"; font-size: 150px; line-height: 1; min-height: 170px; display: flex; align-items: center; }
+  #demo .codes { font-family: var(--mono); color: var(--dim); margin: 8px 0 14px; font-size: 14px; }
+  button.copy {
+    background: var(--panel-2); color: var(--ink); border: 1px solid var(--border);
+    border-radius: 3px; padding: 7px 14px; font: inherit; cursor: pointer;
+  }
+  button.copy:hover { border-color: var(--accent); }
+  button.copy.copied { border-color: var(--neutral); color: var(--neutral); }
+
+  /* Controls bar */
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 28px 0 4px; }
+  #search {
+    flex: 1; min-width: 200px; background: var(--panel); color: var(--ink);
+    border: 1px solid var(--border); border-radius: 3px; padding: 9px 12px; font: inherit;
+  }
+  .toggles { display: flex; gap: 6px; }
+  .aff-toggle {
+    border: 1px solid currentColor; background: transparent; border-radius: 3px;
+    padding: 6px 10px; font: 12px/1 var(--mono); cursor: pointer; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .aff-toggle[data-aff=Friend] { color: var(--friend); }
+  .aff-toggle[data-aff=Enemy] { color: var(--enemy); }
+  .aff-toggle[data-aff=Unknown] { color: var(--unknown); }
+  .aff-toggle[data-aff=Neutral] { color: var(--neutral); }
+  .aff-toggle.off { color: var(--dim); opacity: .5; }
+
+  /* Grid */
+  section.cat.hidden, .card.hidden { display: none; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+    padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; color: inherit; font: inherit; text-align: center;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card.copied { border-color: var(--neutral); }
+  .card .glyph { font-family: "NTDS Icons"; font-size: 40px; line-height: 1; height: 44px; display: flex; align-items: center; }
+  .card .cp { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+  .card .name { font-size: 11px; color: var(--dim); word-break: break-word; }
+  footer { color: var(--dim); font-size: 13px; margin-top: 48px; border-top: 1px solid var(--border); padding-top: 16px; }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) { #demo { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="glyph-mark">◈</span> NTDS Icons</h1>
+    <p>An installable NTDS (Naval Tactical Data System) outline tactical-symbol icon font. Closed = surface, top-open = air, bottom-open = subsurface; square = unknown affiliation.</p>
+    <p class="links">
+      <a href="https://crates.io/crates/ntds-icons">crates.io</a>
+      <a href="https://github.com/peterellisjones/ntds-icons">GitHub</a>
+      <a href="https://github.com/peterellisjones/ntds-icons/blob/main/OFL.txt">Font license (OFL 1.1)</a>
+    </p>
+  </header>
+
+  <h2>Composition demo</h2>
+  <div id="demo" class="panel">
+    <div class="controls">
+      <label for="demo-class">Class</label>
+      <select id="demo-class"></select>
+      <label for="demo-aff">Affiliation</label>
+      <select id="demo-aff"></select>
+      <label for="demo-heading">Heading</label>
+      <div class="heading-row">
+        <input type="range" id="demo-heading" min="0" max="355" step="5" value="45">
+        <output id="demo-heading-out">045°</output>
+      </div>
+      <label for="demo-bda">BDA (replaces heading)</label>
+      <select id="demo-bda">
+        <option value="None">None</option>
+        <option value="Uncertain">Uncertain</option>
+        <option value="ProbablyDestroyed">ProbablyDestroyed</option>
+      </select>
+    </div>
+    <div class="stage">
+      <span id="demo-preview"></span>
+      <div class="codes" id="demo-codes"></div>
+      <button class="copy" id="demo-copy" type="button">Copy codepoints</button>
+    </div>
+  </div>
+
+  <h2>All glyphs</h2>
+  <div class="bar">
+    <input id="search" type="search" placeholder="Search name or codepoint…" autocomplete="off">
+    <div class="toggles">
+      <button class="aff-toggle" data-aff="Friend" type="button">Friend</button>
+      <button class="aff-toggle" data-aff="Enemy" type="button">Enemy</button>
+      <button class="aff-toggle" data-aff="Unknown" type="button">Unknown</button>
+      <button class="aff-toggle" data-aff="Neutral" type="button">Neutral</button>
+    </div>
+  </div>
+  <div id="grid"></div>
+
+  <footer>
+    Glyphs occupy the Private Use Area <code>U+E000–U+E0A9</code>. Font under
+    <a href="https://github.com/peterellisjones/ntds-icons/blob/main/OFL.txt">SIL OFL 1.1</a>;
+    the generator crate under MIT/Apache-2.0. Generated by <code>ntds-font-gen</code>.
+  </footer>
+</div>
+
+<script>
+const GLYPHS = __GLYPH_DATA__;
+const AFF_COLOR = { Friend: "#4aa3ff", Enemy: "#ff5a5a", Unknown: "#ffd23f", Neutral: "#4ade80" };
+const NEUTRAL = "#8b949e";
+const CAT_ORDER = [
+  ["symbol", "Symbols"], ["geometric", "Geometric variants"],
+  ["group", "Groups"], ["group-geo", "Group geometric"],
+  ["unknown", "Unknown class"], ["unknown-geo", "Unknown geometric"],
+  ["heading", "Heading vectors"], ["bda", "BDA decorations"],
+];
+const colorFor = g => g.aff ? AFF_COLOR[g.aff] : NEUTRAL;
+function copyText(t, el) {
+  navigator.clipboard.writeText(t).then(() => {
+    el.classList.add("copied");
+    setTimeout(() => el.classList.remove("copied"), 700);
+  });
+}
+
+// --- grid ---
+const grid = document.getElementById("grid");
+const cards = [];
+for (const [cat, label] of CAT_ORDER) {
+  const items = GLYPHS.filter(g => g.cat === cat);
+  if (!items.length) continue;
+  const sec = document.createElement("section");
+  sec.className = "cat";
+  const h = document.createElement("h2");
+  h.textContent = label + " · " + items.length;
+  sec.appendChild(h);
+  const wrap = document.createElement("div");
+  wrap.className = "cards";
+  for (const g of items) {
+    const cp = "U+" + g.cp;
+    const card = document.createElement("button");
+    card.className = "card";
+    card.type = "button";
+    card.title = "Copy " + cp;
+    const gl = document.createElement("span");
+    gl.className = "glyph";
+    gl.style.color = colorFor(g);
+    gl.textContent = g.ch;
+    const c = document.createElement("span");
+    c.className = "cp";
+    c.textContent = cp;
+    const n = document.createElement("span");
+    n.className = "name";
+    n.textContent = g.name;
+    card.append(gl, c, n);
+    card.addEventListener("click", () => copyText(cp, card));
+    wrap.appendChild(card);
+    cards.push({ el: card, g, hay: (g.name + " " + cp).toLowerCase() });
+  }
+  sec.appendChild(wrap);
+  grid.appendChild(sec);
+}
+
+// --- search + affiliation filter ---
+const search = document.getElementById("search");
+const affState = { Friend: true, Enemy: true, Unknown: true, Neutral: true };
+function applyFilter() {
+  const q = search.value.trim().toLowerCase();
+  for (const c of cards) {
+    const matchText = !q || c.hay.includes(q);
+    const matchAff = !c.g.aff || affState[c.g.aff];
+    c.el.classList.toggle("hidden", !(matchText && matchAff));
+  }
+  document.querySelectorAll("section.cat").forEach(sec => {
+    sec.classList.toggle("hidden", sec.querySelectorAll(".card:not(.hidden)").length === 0);
+  });
+}
+search.addEventListener("input", applyFilter);
+document.querySelectorAll(".aff-toggle").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const a = btn.dataset.aff;
+    affState[a] = !affState[a];
+    btn.classList.toggle("off", !affState[a]);
+    applyFilter();
+  });
+});
+
+// --- composition demo ---
+const dClass = document.getElementById("demo-class");
+const dAff = document.getElementById("demo-aff");
+const dHeading = document.getElementById("demo-heading");
+const dHeadingOut = document.getElementById("demo-heading-out");
+const dBda = document.getElementById("demo-bda");
+const dPreview = document.getElementById("demo-preview");
+const dCodes = document.getElementById("demo-codes");
+const dCopy = document.getElementById("demo-copy");
+
+for (const cls of [...new Set(GLYPHS.filter(g => g.cat === "symbol").map(g => g.class))]) {
+  dClass.add(new Option(cls, cls));
+}
+for (const a of ["Friend", "Enemy", "Unknown", "Neutral"]) dAff.add(new Option(a, a));
+dClass.value = "Surface";
+dAff.value = "Friend";
+
+const find = (cat, pred) => GLYPHS.find(g => g.cat === cat && pred(g));
+function updateDemo() {
+  const base = find("symbol", g => g.class === dClass.value && g.aff === dAff.value);
+  const useBda = dBda.value !== "None";
+  dHeading.disabled = useBda;
+  const deg = parseInt(dHeading.value, 10);
+  dHeadingOut.textContent = String(deg).padStart(3, "0") + "°";
+  const overlay = useBda
+    ? find("bda", g => g.bda === dBda.value)
+    : find("heading", g => g.deg === deg);
+  dPreview.style.color = AFF_COLOR[dAff.value];
+  dPreview.textContent = base.ch + (overlay ? overlay.ch : "");
+  const codes = ["U+" + base.cp].concat(overlay ? ["U+" + overlay.cp] : []).join(" ");
+  dCodes.textContent = codes;
+  dCopy.onclick = () => copyText(codes, dCopy);
+}
+[dClass, dAff, dHeading, dBda].forEach(el => el.addEventListener("input", updateDemo));
+updateDemo();
+</script>
+</body>
+</html>
