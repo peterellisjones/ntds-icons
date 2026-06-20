@@ -290,6 +290,10 @@ cargo run --features build --bin ntds-font-gen
 `build_font(&FontLayout::default())` reproduces the committed `ntds_icons.ttf`
 byte-for-byte (enforced by a drift test).
 
+## AI assistance
+
+This crate was developed with the help of AI coding tools.
+
 ## Licenses
 
 The two are independent:
