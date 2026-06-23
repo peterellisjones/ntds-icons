@@ -145,8 +145,7 @@ pub fn describe_symbol(
 /// A node in the coarse-to-fine NTDS classification tree, for rendering graded
 /// identity (DC-36.5). Mirrors `dc_types::NtdsNode` but stays game-agnostic so
 /// this crate keeps zero game dependencies. Intermediate nodes render the coarse
-/// environment shape; the specific `Air` leaf adds a fixed-wing glyph so it reads
-/// distinctly from generic air.
+/// environment shape; a resolved leaf renders its full per-class symbol.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NtdsNodeShape {
     /// Environment unresolved — a bare affiliation outline ("pending").
@@ -164,9 +163,8 @@ pub enum NtdsNodeShape {
 /// Return the shape commands for a coarse-to-fine NTDS tree node (DC-36.5).
 ///
 /// Intermediate nodes render the environment base shape with no class-specific
-/// interior; `Unknown` is a bare affiliation outline. The specific `Air` leaf
-/// gains a fixed-wing glyph (a small upward chevron) so it is distinguishable
-/// from generic air, whose icon is the upper-half base alone.
+/// interior; `Unknown` is a bare affiliation outline. A resolved leaf renders
+/// its full per-class symbol via [`describe_symbol`].
 #[must_use]
 pub fn describe_node_symbol(
     node: NtdsNodeShape,
@@ -176,14 +174,8 @@ pub fn describe_node_symbol(
     radius: f32,
 ) -> Vec<ShapeCmd> {
     match node {
-        NtdsNodeShape::Specific(class) => {
-            let mut cmds = describe_symbol(class, aff, cx, cy, radius);
-            if class == NtdsShapeClass::Air {
-                emit_fixed_wing_glyph(&mut cmds, cx, cy, radius);
-            }
-            cmds
-        }
-        // Generic air: the upper-half base + stationary dot, no fixed-wing glyph.
+        NtdsNodeShape::Specific(class) => describe_symbol(class, aff, cx, cy, radius),
+        // Generic air: the upper-half base + stationary dot.
         NtdsNodeShape::AirGeneric => describe_symbol(NtdsShapeClass::Air, aff, cx, cy, radius),
         // Generic surface / subsurface render as the plain environment shape; the
         // CommandShip cross / specific decorations only appear at a resolved leaf.
@@ -200,16 +192,6 @@ pub fn describe_node_symbol(
             cmds
         }
     }
-}
-
-/// A small upward chevron in the upper half of an air symbol, marking a
-/// fixed-wing (vs generic-air / helicopter / missile) airframe (DC-36.5).
-fn emit_fixed_wing_glyph(cmds: &mut Vec<ShapeCmd>, cx: f32, cy: f32, r: f32) {
-    cmds.push(ShapeCmd::LineStrip(vec![
-        [cx - 0.35 * r, cy + 0.30 * r],
-        [cx, cy + 0.60 * r],
-        [cx + 0.35 * r, cy + 0.30 * r],
-    ]));
 }
 
 /// BDA (Battle Damage Assessment) decoration overlay for stale contacts.
